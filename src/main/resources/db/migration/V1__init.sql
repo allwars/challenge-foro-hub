@@ -1,0 +1,36 @@
+CREATE TABLE usuario (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    tipo_usuario ENUM('COMUM', 'MODERADOR', 'ADMIN') NOT NULL DEFAULT 'COMUM'
+);
+
+CREATE TABLE curso (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    categoria VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE topico (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    mensagem TEXT NOT NULL,
+    status ENUM('NAO_RESPONDIDO', 'FECHADO', 'SOLUCIONADO') NOT NULL DEFAULT 'NAO_RESPONDIDO',
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    id_usuario BIGINT,
+    id_curso BIGINT,
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id),
+    FOREIGN KEY (id_curso) REFERENCES curso(id)
+);
+
+CREATE TABLE resposta (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    mensagem TEXT NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id_usuario BIGINT,
+    id_topico BIGINT,
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id),
+    FOREIGN KEY (id_topico) REFERENCES topico(id)
+);
